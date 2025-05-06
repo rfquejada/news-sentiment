@@ -4,7 +4,10 @@ from models import NewsResponse
 
 router = APIRouter()
 
-@router.get("/fetch-news")
+@router.get("/fetch-news", response_model=NewsResponse)
 def get_news():
     articles = fetch_news()
-    return {"articles": articles}
+    return {
+        "articles": articles, 
+        "total_articles": len(articles)
+        }
