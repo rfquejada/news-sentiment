@@ -1,6 +1,7 @@
 import requests
 from config import NEWS_API_URL, NEWS_API_KEY
 from models import Article
+from services.sentiment_analyzer import analyze_sentiment
 
 
 def fetch_news(db, max_pages=50, max_articles=15):
@@ -74,6 +75,16 @@ def fetch_news(db, max_pages=50, max_articles=15):
 
     print(f"{len(collected_articles)} trusted articles fetched")
 
+    for article in collected_articles:
+        sentiment, score = analyze_sentiment(
+            title=article["title"],
+            description=article["description"] if article["description"] else "",
+            categories=article["category"]
+        )
+
+        article["sentiment"] = sentiment
+        article["sentiment_score"] = score
+
     # Replace the existing articles in the database with the new ones
     db.query(Article).delete()
     db.commit()
@@ -86,7 +97,9 @@ def fetch_news(db, max_pages=50, max_articles=15):
             source_url=article["source_url"],
             pubDate=article["pubDate"],
             category=article["category"],
-            image_url=article["image_url"]
+            image_url=article["image_url"],
+            sentiment=article["sentiment"],
+            sentiment_score=article["sentiment_score"]
         )
         db.add(db_article)
     db.commit()

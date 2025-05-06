@@ -1,7 +1,7 @@
 import uuid
 from pydantic import BaseModel
 from typing import List, Optional
-from sqlalchemy import Column, DateTime, String, func, UUID
+from sqlalchemy import Column, DateTime, Float, String, func, UUID
 from config import Base
 
 class Article(Base):
@@ -16,6 +16,8 @@ class Article(Base):
     pubDate = Column(DateTime(timezone=True), server_default=func.now())
     category = Column(String, nullable=False)
     image_url = Column(String, nullable=True)
+    sentiment = Column(String, nullable=True)
+    sentiment_score = Column(Float, nullable=True)
 
 class ArticleOut(BaseModel):
     title: str
@@ -25,6 +27,8 @@ class ArticleOut(BaseModel):
     pubDate: str
     category: str
     image_url: Optional[str] = None
+    sentiment: Optional[str] = None
+    sentiment_score: Optional[float] = None
 
 
 class NewsResponse(BaseModel):
