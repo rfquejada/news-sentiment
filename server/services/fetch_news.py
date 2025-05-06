@@ -1,8 +1,9 @@
 import requests
 from config import NEWS_API_URL, NEWS_API_KEY
+from models import Article
 
 
-def fetch_news(max_pages=50, max_articles=15):
+def fetch_news(db, max_pages=50, max_articles=15):
     base_url = f"{NEWS_API_URL}/latest"
     headers = {
         "accept": "application/json",
@@ -72,4 +73,25 @@ def fetch_news(max_pages=50, max_articles=15):
             break
 
     print(f"{len(collected_articles)} trusted articles fetched")
+
+    # Replace the existing articles in the database with the new ones
+    db.query(Article).delete()
+    db.commit()
+    for article in collected_articles:
+        db_article = Article(
+            article_id=article["article_id"],
+            title=article["title"],
+            link=article["link"],
+            description=article["description"],
+            source_url=article["source_url"],
+            pubDate=article["pubDate"],
+            category=article["category"],
+            image_url=article["image_url"]
+        )
+        db.add(db_article)
+    db.commit()
+    db.refresh(db_article)
+
+    db.close()
+
     return collected_articles
