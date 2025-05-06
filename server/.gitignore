@@ -1,0 +1,17 @@
+# Byte-compiled
+__pycache__/
+
+# Virtual environment
+venv/
+.env
+.env.local
+*.pyc
+*.pyo
+
+# Database files
+*.sqlite3
+
+# Logs
+logs/
+*.log
+.vercel
