@@ -30,7 +30,26 @@ class ArticleOut(BaseModel):
     sentiment: Optional[str] = None
     sentiment_score: Optional[float] = None
 
-
 class NewsResponse(BaseModel):
     articles: List[ArticleOut]
     total_articles: int = 0
+
+class NewsOut(BaseModel):
+    title: str
+    link: str
+    description: Optional[str] = None
+    source_url: str
+    pubDate: str
+    image_url: Optional[str] = None
+    sentiment: Optional[str] = None
+    sentiment_score: Optional[float] = None
+
+    class Config:
+        from_attributes = True
+
+class NewsOutList(BaseModel):
+    articles: List[NewsOut]
+    total_articles: int = 0
+
+    class Config:
+        from_attributes = True

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from routes.fetch_news import router as fetch_news_router
+from routes.fetch_api import router as fetch_api_router
 
 app = FastAPI()
 
@@ -29,3 +29,4 @@ app.add_middleware(
 )
 
 app.include_router(fetch_news_router, prefix="/api", tags=["news"])
+app.include_router(fetch_api_router, prefix="/api", tags=["fetch-api"])
