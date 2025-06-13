@@ -35,7 +35,6 @@ function App() {
     };
 
     fetchArticles();
-    console.log(articles);
   }, [sentimentFilter]);
 
   return (

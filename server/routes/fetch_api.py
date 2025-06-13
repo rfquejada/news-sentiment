@@ -68,7 +68,7 @@ def get_news(
     
     articles = []
     for article in result:
-        formatted_date = f"{article.pubDate.strftime('%B')} {article.pubDate.day}, {article.pubDate.year}"
+        formatted_date = article.pubDate.strftime("%B %d, %Y %I:%M %p")
         articles.append({
             "title": article.title,
             "link": article.link,
