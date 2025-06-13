@@ -1,7 +1,7 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import QueuePool
 from dotenv import load_dotenv
 from newsdataapi import NewsDataApiClient
 
@@ -18,7 +18,11 @@ newsapi = NewsDataApiClient(NEWS_API_KEY)
 # Define the configuration for the database connection
 DB_STRING = os.getenv("DB_STRING")
 
-engine = create_engine(DB_STRING, client_encoding='utf8', poolclass=NullPool)
+engine = create_engine(DB_STRING, client_encoding='utf8', poolclass=QueuePool,
+    pool_size=10,
+    max_overflow=20,
+    pool_pre_ping=True,
+    pool_recycle=300)
 try:
    connection = engine.connect()
    print("Successfully connected to the database!")
